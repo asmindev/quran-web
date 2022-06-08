@@ -10,12 +10,14 @@ export default function Detail() {
   const { id } = useParams()
   const getSurah = async () => {
     setLoading(true)
-    const res = await axios.get(`https://api.quran.sutanlab.id/surah/${id}`)
+    const res = await axios.get(`https://quran-cloud.vercel.app/surah/${id}`)
     setLoading(false)
     setSurah(res.data.data)
   }
   useEffect(() => {
-    getSurah()
+    if (id) {
+      getSurah()
+    }
   }, [])
   return (
     <div className="w-full">
@@ -38,7 +40,9 @@ export default function Detail() {
                 <p className="text-left">
                   {surah.name ? `${surah.numberOfVerses} Ayat` : 'loading..'}
                 </p>
-                <span className="tet-gray-50">{surah.name ? `- ${surah.revelation.id}` : 'loading..'}</span>
+                <span className="tet-gray-50">
+                  {surah.name ? `- ${surah.revelation.id}` : 'loading..'}
+                </span>
               </div>
             </div>
             <div className="w-1/3 p-2 flex justify-end">

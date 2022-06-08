@@ -9,7 +9,7 @@ export default function Home() {
   const inputRef = useRef(null)
   async function getSurah(name = '') {
     setLoading(true)
-    const response = await axios.get('https://api.quran.sutanlab.id/surah')
+    const response = await axios.get('https://quran-cloud.vercel.app/surah')
     setLoading(false)
     if (!name) {
       setSurah(response.data.data)
