@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Ayat from '../components/Ayat'
-import quran from '../assets/img/quran.png'
+import recite from '../assets/img/quran (1).png'
 
 export default function Detail() {
   const [surah, setSurah] = useState({})
@@ -27,7 +27,7 @@ export default function Detail() {
             <h1 className="text-xl font-black text-gray-700">Baca Sekarang.</h1>
           </div>
           <div className="w-full h-full p-4 md:px-6 flex gap-4 justify-between items-center mt-2 rounded-md bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-100">
-            <div className="text-left h-full flex flex-col">
+            <div className="w-full text-left h-full flex flex-col">
               <div className="w-full">
                 <h1 className="text-4xl mb-4 font-bold text-indigo-50">
                   {surah.name ? surah.name.short : 'loading..'}
@@ -36,7 +36,7 @@ export default function Detail() {
                   <p>{surah.name ? surah.name.translation.id : 'loading..'}</p>
                 </span>
               </div>
-              <div className="text-gray-200 text-xs flex items-center gap-2">
+              <div className="text-gray-200 text-xs flex items-center gap-2 w-full">
                 <p className="text-left">
                   {surah.name ? `${surah.numberOfVerses} Ayat` : 'loading..'}
                 </p>
@@ -45,8 +45,8 @@ export default function Detail() {
                 </span>
               </div>
             </div>
-            <div className="w-1/3 p-2 flex justify-end">
-              <img src={quran} className="w-full md:w-2/3" alt="quran" />
+            <div className="w-fit flex justify-end">
+              <img src={recite} className="w-1/2 md:w-2/3" alt="quran" />
             </div>
           </div>
         </div>

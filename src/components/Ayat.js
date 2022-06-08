@@ -1,11 +1,13 @@
 import React from 'react'
+import ReactAudioPlayer from 'react-audio-player'
 
 export default function Surah({ surah }) {
   return (
-    <div className="w-full h-full p-4 flex flex-col gap-4 border border-indigo-100 rounded-lg">
+    <div className="w-full h-full p-4 flex flex-wrap flex-col gap-4 border border-indigo-100 rounded-lg">
       <div className="w-full flex">
         <div className="bg-indigo-100/50 mt-2 text-indigo-600 w-fit px-2 h-fit flex justify-center items-center">
           {surah.number.inSurah}
+          <span />
         </div>
         <div className="w-full">
           <h1 className="w-full text-right text-4xl text-indigo-500 font-medium">
@@ -20,6 +22,9 @@ export default function Surah({ surah }) {
         <h2 className="w-full text-justify text-sm text-gray-600">
           {surah.translation.id}
         </h2>
+      </div>
+      <div>
+        <ReactAudioPlayer src={surah.audio.primary} controls />
       </div>
     </div>
   )
