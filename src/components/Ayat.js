@@ -5,7 +5,7 @@ export default function Surah({ surah }) {
   return (
     <div className="w-full h-full p-4 flex flex-wrap flex-col gap-4 border border-indigo-100 rounded-lg">
       <div className="w-full flex">
-        <div className="bg-indigo-100/50 mt-2 text-indigo-600 w-fit px-2 h-fit flex justify-center items-center">
+        <div className="bg-indigo-100/50 mt-2 rounded text-indigo-600 w-fit px-2 h-fit flex justify-center items-center">
           {surah.number.inSurah}
           <span />
         </div>
@@ -23,8 +23,13 @@ export default function Surah({ surah }) {
           {surah.translation.id}
         </h2>
       </div>
-      <div>
-        <ReactAudioPlayer src={surah.audio.primary} controls />
+      <div className="w-full">
+        <ReactAudioPlayer
+          className="w-full"
+          controlsList="nodownload noplaybackrate"
+          src={surah.audio.primary}
+          controls
+        />
       </div>
     </div>
   )

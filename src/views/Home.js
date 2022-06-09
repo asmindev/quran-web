@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Surah from '../components/Surah'
+import TextAnimation from '../components/TextAnimation'
 import quran from '../assets/img/quran.png'
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
     <div className="w-full">
       <div className="w-11/12 lg:w-8/12 mx-auto">
         <div className="mt-12 w-full text-left">
-          <h1 className="text-lg font-bold">Assalamualaikum</h1>
+          <TextAnimation text="Assalamualaikum" />
           <div className="w-full p-4 md:px-6 flex gap-4 justify-between items-center mt-2 rounded-md bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-100">
             <div className=" text-left">
               <h1 className="text-2xl font-bold text-indigo-50">Quran web</h1>
