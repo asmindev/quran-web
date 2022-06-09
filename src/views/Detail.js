@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { motion } from 'framer-motion'
 import Ayat from '../components/Ayat'
 import recite from '../assets/img/quran (1).png'
 
@@ -8,10 +9,32 @@ export default function Detail() {
   const [surah, setSurah] = useState({})
   const [loading, setLoading] = useState(false)
   const { id } = useParams()
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.8,
+        when: 'afterChildren',
+        staggerChildren: 0.5,
+        type: 'spring',
+      },
+    },
+  }
+
+  const item = {
+    hidden: { y: 200, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  }
+
   const getSurah = async () => {
     setLoading(true)
     const res = await axios.get(`https://quran-cloud.vercel.app/surah/${id}`)
     setLoading(false)
+    console.log(loading)
     setSurah(res.data.data)
   }
   useEffect(() => {
@@ -19,6 +42,7 @@ export default function Detail() {
       getSurah()
     }
   }, [])
+  console.log(surah.verses)
   return (
     <div className="w-full">
       <div className="w-11/12 lg:w-8/12 mx-auto">
@@ -29,9 +53,9 @@ export default function Detail() {
           <div className="w-full h-full p-4 md:px-6 flex gap-4 justify-between items-center mt-2 rounded-md bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-100">
             <div className="w-full text-left h-full flex flex-col">
               <div className="w-full">
-                <h1 className="text-4xl mb-4 font-bold text-indigo-50">
+                <motion.h1 className="text-4xl mb-4 font-bold text-indigo-50">
                   {surah.name ? surah.name.short : 'loading..'}
-                </h1>
+                </motion.h1>
                 <span className="text-xs text-gray-200">
                   <p>{surah.name ? surah.name.translation.id : 'loading..'}</p>
                 </span>
@@ -51,20 +75,28 @@ export default function Detail() {
           </div>
         </div>
         <div className="w-full">
-          <div className="flex flex-wrap  md:flex-row">
-            {!loading ? (
-              surah.number
-              && surah.verses.map((ayat) => (
-                <div key={ayat.number} className="w-full md:w-1/2 p-2">
-                  <Ayat surah={ayat} />
+          <motion.div
+            initial="hidden"
+            animate={surah.number ? 'visible' : 'hidden'}
+            variants={container}
+            className="flex flex-wrap  md:flex-row justify-center"
+          >
+            {
+              surah.verses && surah.verses.map((ayat) => (
+                <div key={ayat.number.inQuran} className="w-full flex md:w-1/2 p-2 h-full overflow-hidden">
+                  <motion.div
+                    variants={item}
+                    className="w-full h-full"
+                  >
+                    <Ayat surah={ayat} />
+                  </motion.div>
                 </div>
               ))
-            ) : (
-              <h1 className="text-2xl font-medium">Loading...</h1>
-            )}
-          </div>
+            }
+          </motion.div>
         </div>
       </div>
+      <div className="w-full py-5 text-center">ini footer</div>
     </div>
   )
 }
