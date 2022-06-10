@@ -1,32 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Surah from '../components/Surah'
 import TextAnimation from '../components/TextAnimation'
 import quran from '../assets/img/quran.png'
+import listSurah from '../assets/json/list-surah'
 
 export default function Home() {
   const [surah, setSurah] = useState([])
   const [loading, setLoading] = useState(false)
-  const inputRef = useRef(null)
-  async function getSurah(name = '') {
+  const [suggestion, setSuggestion] = useState([])
+  const [input, setInput] = useState('')
+  async function getSurah() {
     setLoading(true)
     const response = await axios.get('https://quran-cloud.vercel.app/surah')
     setLoading(false)
-    if (!name) {
-      setSurah(response.data.data)
-    } else {
-      const result = response.data.data
-      const hasil = result.find((item) => item.number === parseInt(name, 9))
+    setSurah(response.data.data)
+  }
+  const submit = async (e) => {
+    e.preventDefault()
+    setSuggestion([])
+    await getSurah()
+    if (surah) {
+      const hasil = surah.find((item) => item.number === parseInt(input, 10))
       if (hasil?.number) {
         setSurah([hasil])
       }
     }
   }
-  const submit = (e) => {
-    e.preventDefault()
-    // setSurah({})
-    getSurah(inputRef.current.value)
-    console.log({ result: surah })
+  const handleComplete = async (e) => {
+    const { id } = e.target
+    const response = await axios.get('https://quran-cloud.vercel.app/surah')
+    const hasil = response.data.data.find(
+      (item) => item.number === parseInt(id, 10)
+    )
+    setInput('')
+    setSuggestion([])
+    setSurah([hasil])
+  }
+  const onSearch = (e) => {
+    const { value } = e.target
+    setInput(value)
+    if (!value) {
+      setSuggestion([])
+    } else if (Number.isInteger(parseInt(value, 10)) && parseInt(value, 10) < 115) {
+      setSuggestion([listSurah.find((x) => x.number === parseInt(value, 10))])
+    } else {
+      const main = listSurah.filter((x) => x.surah.toLowerCase().includes(value.toLowerCase()))
+      setSuggestion(main)
+    }
   }
   useEffect(() => {
     getSurah()
@@ -35,7 +56,9 @@ export default function Home() {
     <div className="w-full">
       <div className="w-11/12 lg:w-8/12 mx-auto">
         <div className="mt-12 w-full text-left">
-          <TextAnimation text="Assalamualaikum" />
+          <div className="w-fit font-bold">
+            <TextAnimation text="Assalamualaikum" />
+          </div>
           <div className="w-full p-4 md:px-6 flex gap-4 justify-between items-center mt-2 rounded-md bg-gradient-to-tr from-indigo-500 via-indigo-400 to-indigo-100">
             <div className=" text-left">
               <h1 className="text-2xl font-bold text-indigo-50">Quran web</h1>
@@ -51,9 +74,10 @@ export default function Home() {
             <div className="w-full h-full mx-auto rounded border border-indigo-500 flex overflow-hidden justify-between">
               <div className="w-9/12">
                 <input
-                  ref={inputRef}
+                  onChange={onSearch}
                   className="h-full w-full p-2 focus:outline-none"
                   type="text"
+                  value={input}
                   placeholder="Cari Surah"
                 />
               </div>
@@ -65,6 +89,19 @@ export default function Home() {
                   Cari
                 </button>
               </div>
+            </div>
+            <div className={suggestion.length !== 0 ? 'w-full mt-2 max-h-32 overflow-scroll border border-indigo-500 rounded' : 'hidden'}>
+              {suggestion.map((item) => (
+                <button
+                  type="button"
+                  onClick={handleComplete}
+                  id={item.number}
+                  key={item.number}
+                  className="w-full text-left p-2"
+                >
+                  <h1 id={item.number}>{`${item.number}. ${item.surah}`}</h1>
+                </button>
+                ))}
             </div>
           </form>
         </div>
