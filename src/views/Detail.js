@@ -54,18 +54,18 @@ export default function Detail() {
             <div className="w-full text-left h-full flex flex-col">
               <div className="w-full">
                 <motion.h1 className="text-4xl mb-4 font-bold text-indigo-50">
-                  {surah.name ? surah.name.short : 'loading..'}
+                  {surah.name ? surah.name.short : <div className="relative w-32 h-6 animate-pulse rounded bg-indigo-50/50" />}
                 </motion.h1>
                 <span className="text-xs text-gray-200">
-                  <p>{surah.name ? surah.name.translation.id : 'loading..'}</p>
+                  <p>{surah.name ? surah.name.translation.id : <div className="relative w-12 h-4 animate-pulse rounded bg-indigo-50/50" />}</p>
                 </span>
               </div>
               <div className="text-gray-200 text-xs flex items-center gap-2 w-full">
                 <p className="text-left">
-                  {surah.name ? `${surah.numberOfVerses} Ayat` : 'loading..'}
+                  {surah.name ? `${surah.numberOfVerses} Ayat` : <div className="mt-2 relative w-8 h-4 animate-pulse rounded bg-indigo-50/50" />}
                 </p>
                 <span className="tet-gray-50">
-                  {surah.name ? `- ${surah.revelation.id}` : 'loading..'}
+                  {surah.name ? `- ${surah.revelation.id}` : <div className="mt-2 relative w-24 h-4 animate-pulse rounded bg-indigo-50/50" />}
                 </span>
               </div>
             </div>
