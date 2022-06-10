@@ -34,19 +34,18 @@ export default function Detail() {
     setLoading(true)
     const res = await axios.get(`https://quran-cloud.vercel.app/surah/${id}`)
     setLoading(false)
-    console.log(loading)
+    document.title = `${res.data.data.name.transliteration.id} - Quran`
     setSurah(res.data.data)
+    console.log(loading)
   }
   useEffect(() => {
     if (id) {
       getSurah()
-      document.title = `${surah.name.translation.id} - Quran`
     }
     return () => {
       document.title = 'Quran Web - Bersahabat dengan Quran'
     }
   }, [])
-  console.log(surah.verses)
   return (
     <div className="w-full">
       <div className="w-11/12 lg:w-8/12 mx-auto">
