@@ -55,7 +55,7 @@ export default function Home() {
         listSurah.map((item) => item.surah),
         1
       )
-      if (!main.number) {
+      if (!main[0]?.number) {
         main = listSurah.filter((x) => x.surah.toLowerCase().includes(filter[0].toLowerCase()))
       }
       setSuggestion(main)
@@ -102,7 +102,7 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className={input !== '' > 0 ? 'w-full mt-2 max-h-32 overflow-scroll border border-indigo-500 rounded' : 'hidden'}>
+            <div className={input !== '' && !Number.isInteger(input) ? 'w-full mt-2 max-h-32 overflow-scroll border border-indigo-500 rounded' : 'hidden'}>
               {suggestion.length > 0
                 ? suggestion.map((item) => (
                   <button
