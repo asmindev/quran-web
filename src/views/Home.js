@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import difflib from 'difflib'
 import Surah from '../components/Surah'
 import TextAnimation from '../components/TextAnimation'
 import quran from '../assets/img/quran.png'
@@ -42,10 +43,21 @@ export default function Home() {
     setInput(value)
     if (!value) {
       setSuggestion([])
-    } else if (Number.isInteger(parseInt(value, 10)) && parseInt(value, 10) < 115) {
+    } else if (
+      Number.isInteger(parseInt(value, 10))
+      && parseInt(value, 10) < 115
+    ) {
       setSuggestion([listSurah.find((x) => x.number === parseInt(value, 10))])
     } else {
-      const main = listSurah.filter((x) => x.surah.toLowerCase().includes(value.toLowerCase()))
+      let main = listSurah.filter((x) => x.surah.toLowerCase().includes(value.toLowerCase()))
+      const filter = difflib.getCloseMatches(
+        value,
+        listSurah.map((item) => item.surah),
+        1
+      )
+      if (!main.number) {
+        main = listSurah.filter((x) => x.surah.toLowerCase().includes(filter[0].toLowerCase()))
+      }
       setSuggestion(main)
     }
   }
@@ -90,31 +102,41 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className={suggestion.length !== 0 ? 'w-full mt-2 max-h-32 overflow-scroll border border-indigo-500 rounded' : 'hidden'}>
-              {suggestion.map((item) => (
-                <button
-                  type="button"
-                  onClick={handleComplete}
-                  id={item.number}
-                  key={item.number}
-                  className="w-full text-left p-2"
-                >
-                  <h1 id={item.number}>{`${item.number}. ${item.surah}`}</h1>
-                </button>
-                ))}
+            <div className={input !== '' > 0 ? 'w-full mt-2 max-h-32 overflow-scroll border border-indigo-500 rounded' : 'hidden'}>
+              {suggestion.length > 0
+                ? suggestion.map((item) => (
+                  <button
+                    type="button"
+                    onClick={handleComplete}
+                    id={item.number}
+                    key={item.number}
+                    className="w-full text-left p-2"
+                  >
+                    <h1 id={item.number}>
+                      {`${item.number}. ${item.surah}`}
+                    </h1>
+                  </button>
+                  ))
+                : input && (
+                <h1 className="p-2 text-bold text-gray-500">
+                  Tidak ada hasil{' '}
+                  <span className="text-gray-700 font-medium">
+                    "{input}"
+                  </span>
+                </h1>
+                  )}
             </div>
           </form>
         </div>
         <div className="flex flex-wrap  md:flex-row">
-          {!loading ? (
-            surah
-            && surah.map((ayat) => (
-              <div key={ayat.number} className="w-full md:w-1/2 p-2">
-                <Surah surah={ayat} />
-              </div>
-            ))
-          ) : (
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+          {!loading
+            ? surah
+              && surah.map((ayat) => (
+                <div key={ayat.number} className="w-full md:w-1/2 p-2">
+                  <Surah surah={ayat} />
+                </div>
+              ))
+            : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
               <div key={item} className="w-full md:w-1/2 p-2 h-full">
                 <div className="w-full h-30 border rounded flex items-center py-6 gap-2">
                   <div className="w-2/3 pl-4 flex flex-col gap-2">
@@ -125,10 +147,9 @@ export default function Home() {
                     <div className="w-12 h-4 bg-gray-200 rounded animate-pulse" />
                     <div className="w-full h-2 bg-gray-200 rounded animate-pulse" />
                   </div>
-
                 </div>
               </div>
-          )))}
+              ))}
         </div>
       </div>
     </div>
