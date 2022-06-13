@@ -15,17 +15,17 @@ export default function Home() {
     setLoading(true)
     const response = await axios.get('https://quran-cloud.vercel.app/surah')
     setLoading(false)
-    setSurah(response.data.data)
+    return (response.data.data)
   }
   const submit = async (e) => {
     e.preventDefault()
-    setSuggestion([])
-    await getSurah()
-    if (surah) {
-      const hasil = surah.find((item) => item.number === parseInt(input, 10))
-      if (hasil?.number) {
-        setSurah([hasil])
-      }
+    const tempValueOfInput = input
+    setInput('')
+    const allSurah = await getSurah()
+    const filter = allSurah.filter((item) => item.number === parseInt(tempValueOfInput, 10))
+    if (filter[0]?.number) {
+      setSurah(filter)
+      console.log(filter)
     }
   }
   const handleComplete = async (e) => {
@@ -63,6 +63,7 @@ export default function Home() {
   }
   useEffect(() => {
     getSurah()
+      .then((result) => setSurah(result))
   }, [])
   return (
     <div className="w-full">
@@ -117,13 +118,13 @@ export default function Home() {
                     </h1>
                   </button>
                   ))
-                : input && (
-                <h1 className="p-2 text-bold text-gray-500">
-                  Tidak ada hasil{' '}
-                  <span className="text-gray-700 font-medium">
-                    "{input}"
-                  </span>
-                </h1>
+                : input && !Number.isInteger(input) && (
+                  <h1 className="p-2 text-bold text-gray-500">
+                    Tidak ada hasil{' '}
+                    <span className="text-gray-700 font-medium">
+                      "{input}"
+                    </span>
+                  </h1>
                   )}
             </div>
           </form>
