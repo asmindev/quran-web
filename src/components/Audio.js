@@ -35,17 +35,17 @@ export default function Audio({ audio }) {
           <p
             className={`${
                 onPlay
-                  ? 'delay-100 rotate-0 opacity-100'
+                  ? 'text-indigo-600 delay-100 rotate-0 opacity-100'
                   : 'opacity-0 rotate-90'
               } transition-all duration-200 h-5 absolute top-0`}
           >
             <ion-icon name="pause-outline" />
           </p>
         </button>
-        <div className="w-[90%] h-1 bg-indigo-100/80">
+        <div className="w-[90%] h-0.5 bg-indigo-100/80">
           <div
             role="progressbar"
-            className="h-1 bg-indigo-400 rounded-lg transition-all duration-300"
+            className="h-full bg-indigo-400 rounded-lg transition-all duration-100"
             aria-valuenow={duration}
             style={{ width: `${parseInt(duration, 10)}%` }}
             aria-label="save"

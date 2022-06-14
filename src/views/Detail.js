@@ -116,7 +116,6 @@ export default function Detail() {
           </motion.div>
         </div>
       </div>
-      <div className="w-full py-5 text-center">ini footer</div>
     </div>
   )
 }

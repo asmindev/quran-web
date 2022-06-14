@@ -6,7 +6,7 @@ module.exports = {
       fontFamily: {
         popins: ['Poppins', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
-        outfit: ['Outfit', 'sans-serif']
+        outfit: ['Outfit', 'sans-serif'],
       },
     },
   },
